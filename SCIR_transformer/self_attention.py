@@ -17,13 +17,13 @@ class SelfAttention(nn.Module):
         b, t, k = x.size()
         h = self.heads
 
-        Q = self.Q(x).reshape(b, t, k, h)
-        K = self.K(x).reshape(b, t, k, h)
-        V = self.V(x).reshape(b, t, k, h)
+        Q = self.Q(x).reshape(b, t, h, k)
+        K = self.K(x).reshape(b, t, h, k)
+        V = self.V(x).reshape(b, t, h, k)
 
-        Q = Q.transpose(1, 3).reshape(b * h, t, k)
-        K = K.transpose(1, 3).reshape(b * h, t, k)
-        V = V.transpose(1, 3).reshape(b * h, t, k)
+        Q = Q.transpose(1, 2).reshape(b * h, t, k)
+        K = K.transpose(1, 2).reshape(b * h, t, k)
+        V = V.transpose(1, 2).reshape(b * h, t, k)
 
         Q /= (k ** (1/4))
         K /= (k ** (1/4))

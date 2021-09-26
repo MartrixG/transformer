@@ -4,15 +4,15 @@ from self_attention import SelfAttention
 
 
 class TransformerBlock(nn.Module):
-    def __init__(self, k, heads):
+    def __init__(self, word_em_dim, heads):
         super(TransformerBlock, self).__init__()
-        self.attention = SelfAttention(k, heads=heads)
-        self.norm1 = nn.LayerNorm(k)
-        self.norm2 = nn.LayerNorm(k)
+        self.attention = SelfAttention(word_em_dim, heads=heads)
+        self.norm1 = nn.LayerNorm(word_em_dim)
+        self.norm2 = nn.LayerNorm(word_em_dim)
         self.ff = nn.Sequential(
-            nn.Linear(k, 4 * k),
+            nn.Linear(word_em_dim, 4 * word_em_dim),
             nn.ReLU(),
-            nn.Linear(4 * k, k)
+            nn.Linear(4 * word_em_dim, word_em_dim)
         )
 
     def forward(self, x):
@@ -23,8 +23,8 @@ class TransformerBlock(nn.Module):
 
 
 if __name__ == '__main__':
-    x_in = torch.rand((2, 3, 5))
-    network = TransformerBlock(5, 8)
+    x_in = torch.rand((32, 128, 300))
+    network = TransformerBlock(300, 8)
     print(x_in)
     y = network(x_in)
     print(y)
